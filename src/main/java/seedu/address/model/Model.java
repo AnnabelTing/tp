@@ -35,6 +35,32 @@ public interface Model {
     void setGuiSettings(GuiSettings guiSettings);
 
     /**
+     * Returns the RoomManagerFilePath
+     */
+    Path getRoomManagerFilePath();
+
+    /**
+     * Sets up {@code RoomManager} to determine {@code RoomType} of each room declared.
+     * There must not be another existing {@code RoomManager}.
+     */
+    void setUp(int[] roomNumbers);
+
+    /**
+     * Returns true if rooms have been set up.
+     */
+    boolean hasSetUp();
+
+    /**
+     * Clears existing rooms in {@code RoomManager}
+     */
+    void clearSetUp();
+
+    /**
+     * Returns unmodifiable list of {@code room}
+     */
+    RoomManagerState getRoomManagerState();
+
+    /**
      * Returns the user prefs' address book file path.
      */
     Path getBookingBookFilePath();

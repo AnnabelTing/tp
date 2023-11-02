@@ -42,6 +42,11 @@ public class DeleteCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+
+        if (!model.hasSetUp()) {
+            throw new CommandException(Messages.MESSAGE_SETUP_NOT_FOUND);
+        }
+
         List<Booking> lastShownList = model.getFilteredBookingList();
         List<Booking> deleteList = new ArrayList<>();
 

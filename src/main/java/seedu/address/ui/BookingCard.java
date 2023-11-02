@@ -53,7 +53,7 @@ public class BookingCard extends UiPart<Region> {
         super(FXML);
         this.booking = booking;
         id.setText(displayedIndex + ". ");
-        room.setText("Room: " + booking.getRoom().value);
+        room.setText("Room: " + booking.getRoom().roomNumber);
         name.setText("Client: " + booking.getName().fullName);
         phone.setText("Contact: " + booking.getPhone().value);
         email.setText("Email: " + booking.getEmail().value);

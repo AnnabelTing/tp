@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.RoomManager;
 import seedu.address.model.booking.Booking;
 import seedu.address.model.booking.BookingPeriod;
 import seedu.address.model.booking.Remark;
@@ -48,7 +49,7 @@ class JsonAdaptedPerson {
      * Converts a given {@code Person} into this class for Jackson use.
      */
     public JsonAdaptedPerson(Booking source) {
-        room = String.valueOf(source.getRoom().value);
+        room = String.valueOf(source.getRoom().roomNumber);
         bookingPeriod = source.getBookingPeriod().value;
         name = source.getName().fullName;
         phone = source.getPhone().value;
@@ -63,13 +64,14 @@ class JsonAdaptedPerson {
      * @throws IllegalValueException if there were any data constraints violated in the adapted person.
      */
     public Booking toModelType() throws IllegalValueException {
+        int roomNumber = Integer.parseInt(room);
         if (room == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Room.class.getSimpleName()));
         }
-        if (Room.isValidRoom(room)) {
-            throw new IllegalValueException(Name.MESSAGE_CONSTRAINTS);
+        if (Room.isValidRoom(roomNumber)) {
+            throw new IllegalValueException(Room.MESSAGE_CONSTRAINTS);
         }
-        final Room modelRoom = new Room(room);
+        final Room modelRoom = RoomManager.getRoom(roomNumber);
 
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));

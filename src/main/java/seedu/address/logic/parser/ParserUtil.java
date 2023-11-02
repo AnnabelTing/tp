@@ -9,6 +9,7 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.RoomManager;
 import seedu.address.model.booking.BookingPeriod;
 import seedu.address.model.booking.Remark;
 import seedu.address.model.booking.Room;
@@ -23,7 +24,11 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
-    public static final String MESSAGE_INVALID_ROOM = "Room is not a between 1 and 500 inclusive.";
+    public static final String MESSAGE_INVALID_ROOM = "Room is not between 1 and " + RoomManager.getRoomTotal()
+            + " inclusive.";
+    public static final String MESSAGE_INVALID_TOTAL_ROOM_RANGE = "Total number of rooms is not between "
+            + "1 and 500 inclusive.";
+    public static final String MESSAGE_INVALID_ROOM_RANGE = "Number of rooms is not between 1 and 500 inclusive.";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -39,6 +44,36 @@ public class ParserUtil {
     }
 
     /**
+     * Parses room range for each room type into an array of integer containing all room type.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given room range is invalid.
+     */
+    public static int[] parseRoomRange(String normalRoomRange, String studioRoomRange, String deluxeRoomRange,
+                                     String suitesRoomRange, String presidentialSuitesRoomRange, String vipRoomRange)
+            throws ParseException {
+        int normalRoomNumber = Integer.parseInt(normalRoomRange.trim());
+        int studioRoomNumber = Integer.parseInt(studioRoomRange.trim());
+        int deluxeRoomNumber = Integer.parseInt(deluxeRoomRange.trim());
+        int suitesRoomNumber = Integer.parseInt(suitesRoomRange.trim());
+        int presidentialSuitesRoomNumber = Integer.parseInt(presidentialSuitesRoomRange.trim());
+        int vipRoomNumber = Integer.parseInt(vipRoomRange.trim());
+        int[] roomRange = {normalRoomNumber, studioRoomNumber, deluxeRoomNumber, suitesRoomNumber,
+            presidentialSuitesRoomNumber, vipRoomNumber};
+        int sum = 0;
+        for (int roomNumber : roomRange) {
+            if (roomNumber < 0 || roomNumber > 500) {
+                throw new ParseException(MESSAGE_INVALID_ROOM_RANGE);
+            }
+            sum = sum + roomNumber;
+        }
+        if (sum > 500 || sum == 0) {
+            throw new ParseException(MESSAGE_INVALID_TOTAL_ROOM_RANGE);
+        }
+        return roomRange;
+    }
+
+    /**
      * Parses a {@code String name} into a {@code Name}.
      * Leading and trailing whitespaces will be trimmed.
      *
@@ -47,10 +82,11 @@ public class ParserUtil {
     public static Room parseRoom(String room) throws ParseException {
         requireNonNull(room);
         String trimmedRoom = room.trim();
-        if (Room.isValidRoom(trimmedRoom)) {
+        int roomNumber = Integer.parseInt(trimmedRoom);
+        if (Room.isValidRoom(roomNumber)) {
             throw new ParseException(MESSAGE_INVALID_ROOM);
         }
-        return new Room(room);
+        return RoomManager.getRoom(roomNumber);
     }
 
     /**

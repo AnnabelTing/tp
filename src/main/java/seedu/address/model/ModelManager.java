@@ -19,6 +19,7 @@ import seedu.address.model.booking.Booking;
 public class ModelManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
+    private final RoomManager roomManager = new RoomManager();
     private final BookingsBook bookingsBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Booking> filteredBookings;
@@ -26,11 +27,13 @@ public class ModelManager implements Model {
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
      */
-    public ModelManager(ReadOnlyBookingsBook addressBook, ReadOnlyUserPrefs userPrefs) {
+    public ModelManager(ReadOnlyBookingsBook addressBook, RoomManagerState roomManagerState,
+                        ReadOnlyUserPrefs userPrefs) {
         requireAllNonNull(addressBook, userPrefs);
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
+        this.roomManager.setState(roomManagerState);
         this.bookingsBook = new BookingsBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredBookings = new FilteredList<>(this.bookingsBook.getPersonList());
@@ -38,7 +41,7 @@ public class ModelManager implements Model {
     }
 
     public ModelManager() {
-        this(new BookingsBook(), new UserPrefs());
+        this(new BookingsBook(), new RoomManager().getState(), new UserPrefs());
     }
 
     //=========== UserPrefs ==================================================================================
@@ -66,6 +69,31 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public Path getRoomManagerFilePath() {
+        return userPrefs.getRoomManagerFilePath();
+    }
+
+    @Override
+    public void setUp(int[] roomNumbers) {
+        this.roomManager.setUp(roomNumbers);
+    }
+
+    @Override
+    public boolean hasSetUp() {
+        return this.roomManager.hasSetUp();
+    }
+
+    @Override
+    public void clearSetUp() {
+        this.roomManager.clearSetUp();
+    }
+
+    @Override
+    public RoomManagerState getRoomManagerState() {
+        return this.roomManager.getState();
+    }
+
+    @Override
     public Path getBookingBookFilePath() {
         return userPrefs.getBookingBookFilePath();
     }
@@ -75,6 +103,7 @@ public class ModelManager implements Model {
         requireNonNull(addressBookFilePath);
         userPrefs.setBookingBookFilePath(addressBookFilePath);
     }
+
 
     //=========== AddressBook ================================================================================
 

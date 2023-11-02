@@ -52,6 +52,7 @@ public class LogicManager implements Logic {
 
         try {
             storage.saveBookingBook(model.getBookingsBook());
+            storage.saveRoomManager(model.getRoomManagerState());
         } catch (AccessDeniedException e) {
             throw new CommandException(String.format(FILE_OPS_PERMISSION_ERROR_FORMAT, e.getMessage()), e);
         } catch (IOException ioe) {

@@ -9,6 +9,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.RoomManager;
 import seedu.address.model.booking.Booking;
 
 /**
@@ -35,7 +36,7 @@ public class RoomPieChart extends UiPart<Region> {
         }
 
         int occupiedRooms = numOfOccupiedRooms;
-        int availableRooms = 500 - occupiedRooms;
+        int availableRooms = RoomManager.getRoomTotal() - occupiedRooms;
         ObservableList<PieChart.Data> pieChartData =
                 FXCollections.observableArrayList(
                         new PieChart.Data("Occupied Rooms: " + occupiedRooms, occupiedRooms),

@@ -16,7 +16,8 @@ import seedu.address.testutil.TypicalPersons;
 
 public class UnflagCommandTest {
     private Model model =
-            new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+            new ModelManager(TypicalPersons.getTypicalAddressBook(), TypicalPersons.getTypicalRoomManagerState(),
+                    new UserPrefs());
 
     @Test
     public void execute_outOfBoundsIndex_throwsCommandException() {

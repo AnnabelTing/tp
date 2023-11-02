@@ -30,6 +30,7 @@ import seedu.address.model.ReadOnlyBookingsBook;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.booking.Booking;
 import seedu.address.storage.JsonBookingBookStorage;
+import seedu.address.storage.JsonRoomManagerStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
 import seedu.address.testutil.BookingBuilder;
@@ -48,8 +49,10 @@ public class LogicManagerTest {
     public void setUp() {
         JsonBookingBookStorage addressBookStorage =
                 new JsonBookingBookStorage(temporaryFolder.resolve("addressBook.json"));
+        JsonRoomManagerStorage roomManagerStorage =
+                new JsonRoomManagerStorage(temporaryFolder.resolve("roomManager.json"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, roomManagerStorage);
         logic = new LogicManager(model, storage);
     }
 
@@ -124,7 +127,7 @@ public class LogicManagerTest {
      */
     private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
                                       String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getBookingsBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getBookingsBook(), model.getRoomManagerState(), new UserPrefs());
         assertCommandFailure(inputCommand, expectedException, expectedMessage, expectedModel);
     }
 
@@ -161,7 +164,9 @@ public class LogicManagerTest {
 
         JsonUserPrefsStorage userPrefsStorage =
                 new JsonUserPrefsStorage(temporaryFolder.resolve("ExceptionUserPrefs.json"));
-        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
+        JsonRoomManagerStorage roomManagerStorage =
+                new JsonRoomManagerStorage(temporaryFolder.resolve("roomManager.json"));
+        StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, roomManagerStorage);
 
         logic = new LogicManager(model, storage);
 

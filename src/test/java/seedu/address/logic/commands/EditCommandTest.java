@@ -13,6 +13,7 @@ import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.address.testutil.TypicalPersons.getTypicalRoomManagerState;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +33,7 @@ import seedu.address.testutil.EditPersonDescriptorBuilder;
  */
 public class EditCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalAddressBook(), getTypicalRoomManagerState(), new UserPrefs());
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -43,7 +44,8 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_BOOKING_SUCCESS,
                 Messages.format(editedBooking));
 
-        Model expectedModel = new ModelManager(new BookingsBook(model.getBookingsBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new BookingsBook(model.getBookingsBook()), model.getRoomManagerState(),
+                new UserPrefs());
         expectedModel.setBooking(model.getFilteredBookingList().get(0), editedBooking);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -64,7 +66,8 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_BOOKING_SUCCESS,
                 Messages.format(editedBooking));
 
-        Model expectedModel = new ModelManager(new BookingsBook(model.getBookingsBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new BookingsBook(model.getBookingsBook()), model.getRoomManagerState(),
+                new UserPrefs());
         expectedModel.setBooking(lastBooking, editedBooking);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -78,7 +81,8 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_BOOKING_SUCCESS,
                 Messages.format(editedBooking));
 
-        Model expectedModel = new ModelManager(new BookingsBook(model.getBookingsBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new BookingsBook(model.getBookingsBook()), model.getRoomManagerState(),
+                new UserPrefs());
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
@@ -95,7 +99,8 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_BOOKING_SUCCESS,
                 Messages.format(editedBooking));
 
-        Model expectedModel = new ModelManager(new BookingsBook(model.getBookingsBook()), new UserPrefs());
+        Model expectedModel = new ModelManager(new BookingsBook(model.getBookingsBook()), model.getRoomManagerState(),
+                new UserPrefs());
         expectedModel.setBooking(model.getFilteredBookingList().get(0), editedBooking);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);

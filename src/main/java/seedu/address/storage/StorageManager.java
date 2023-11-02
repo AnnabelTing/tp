@@ -9,6 +9,7 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.model.ReadOnlyBookingsBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.RoomManagerState;
 import seedu.address.model.UserPrefs;
 
 /**
@@ -20,12 +21,16 @@ public class StorageManager implements Storage {
     private BookingBookStorage bookingBookStorage;
     private UserPrefsStorage userPrefsStorage;
 
+    private RoomManagerStorage roomManagerStorage;
+
     /**
      * Creates a {@code StorageManager} with the given {@code AddressBookStorage} and {@code UserPrefStorage}.
      */
-    public StorageManager(BookingBookStorage bookingBookStorage, UserPrefsStorage userPrefsStorage) {
+    public StorageManager(BookingBookStorage bookingBookStorage, UserPrefsStorage userPrefsStorage,
+                          RoomManagerStorage roomManagerStorage) {
         this.bookingBookStorage = bookingBookStorage;
         this.userPrefsStorage = userPrefsStorage;
+        this.roomManagerStorage = roomManagerStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -45,6 +50,34 @@ public class StorageManager implements Storage {
         userPrefsStorage.saveUserPrefs(userPrefs);
     }
 
+    // ================ RoomManager methods ==============================
+
+    @Override
+    public Path getRoomManagerFilePath() {
+        return roomManagerStorage.getRoomManagerFilePath();
+    }
+
+    @Override
+    public Optional<RoomManagerState> readRoomManager() throws DataLoadingException {
+        return readRoomManager(roomManagerStorage.getRoomManagerFilePath());
+    }
+
+    @Override
+    public Optional<RoomManagerState> readRoomManager(Path filePath) throws DataLoadingException {
+        logger.fine("Attempting to read data from file: " + filePath);
+        return roomManagerStorage.readRoomManager(filePath);
+    }
+
+    @Override
+    public void saveRoomManager(RoomManagerState roomManagerState) throws IOException {
+        saveRoomManager(roomManagerState, roomManagerStorage.getRoomManagerFilePath());
+    }
+
+    @Override
+    public void saveRoomManager(RoomManagerState roomManagerState, Path filePath) throws IOException {
+        logger.fine("Attempting to write to data file: " + filePath);
+        roomManagerStorage.saveRoomManager(roomManagerState, filePath);
+    }
 
     // ================ AddressBook methods ==============================
 

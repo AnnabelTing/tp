@@ -10,6 +10,7 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.address.testutil.TypicalPersons.getTypicalRoomManagerState;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +27,7 @@ import seedu.address.model.booking.Booking;
  */
 public class DeleteCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private Model model = new ModelManager(getTypicalAddressBook(), getTypicalRoomManagerState(), new UserPrefs());
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
@@ -36,7 +37,8 @@ public class DeleteCommandTest {
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_BOOKING_SUCCESS,
                 Messages.format(bookingToDelete));
 
-        ModelManager expectedModel = new ModelManager(model.getBookingsBook(), new UserPrefs());
+        ModelManager expectedModel = new ModelManager(model.getBookingsBook(), model.getRoomManagerState(),
+                new UserPrefs());
         expectedModel.deleteBooking(bookingToDelete);
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
@@ -57,7 +59,7 @@ public class DeleteCommandTest {
         Booking bookingToDelete = model.getFilteredBookingList().get(INDEX_FIRST_PERSON.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
 
-        Model expectedModel = new ModelManager(model.getBookingsBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(model.getBookingsBook(), model.getRoomManagerState(), new UserPrefs());
         expectedModel.deleteBooking(bookingToDelete);
         expectedModel.updateFilteredBookingList(PREDICATE_SHOW_ALL_PERSONS);
 

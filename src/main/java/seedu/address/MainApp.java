@@ -20,11 +20,15 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyBookingsBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.RoomManager;
+import seedu.address.model.RoomManagerState;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
 import seedu.address.storage.BookingBookStorage;
 import seedu.address.storage.JsonBookingBookStorage;
+import seedu.address.storage.JsonRoomManagerStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
+import seedu.address.storage.RoomManagerStorage;
 import seedu.address.storage.Storage;
 import seedu.address.storage.StorageManager;
 import seedu.address.storage.UserPrefsStorage;
@@ -58,7 +62,8 @@ public class MainApp extends Application {
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         BookingBookStorage bookingBookStorage = new JsonBookingBookStorage(userPrefs.getBookingBookFilePath());
-        storage = new StorageManager(bookingBookStorage, userPrefsStorage);
+        RoomManagerStorage roomManagerStorage = new JsonRoomManagerStorage(userPrefs.getRoomManagerFilePath());
+        storage = new StorageManager(bookingBookStorage, userPrefsStorage, roomManagerStorage);
 
         model = initModelManager(storage, userPrefs);
 
@@ -77,6 +82,8 @@ public class MainApp extends Application {
 
         Optional<ReadOnlyBookingsBook> addressBookOptional;
         ReadOnlyBookingsBook initialData;
+        Optional<RoomManagerState> roomManagerOptional;
+        RoomManagerState initialRoomManagerData;
         try {
             addressBookOptional = storage.readBookingBook();
             if (!addressBookOptional.isPresent()) {
@@ -88,9 +95,21 @@ public class MainApp extends Application {
             logger.warning("Data file at " + storage.getBookingBookFilePath() + " could not be loaded."
                     + " Will be starting with an empty AddressBook.");
             initialData = new BookingsBook();
+            initialRoomManagerData = new RoomManager().getState();
+        }
+        try {
+            roomManagerOptional = storage.readRoomManager();
+            if (!roomManagerOptional.isPresent()) {
+                logger.info("Creating a new RoomManager data file " + storage.getRoomManagerFilePath());
+            }
+            initialRoomManagerData = roomManagerOptional.orElseGet(SampleDataUtil::getSampleRoomManager);
+        } catch (DataLoadingException e) {
+            logger.warning("RoomManager data file at " + storage.getRoomManagerFilePath() + " could not be loaded."
+                    + " Will be starting with an empty RoomManager.");
+            initialRoomManagerData = new RoomManager().getState();
         }
 
-        return new ModelManager(initialData, userPrefs);
+        return new ModelManager(initialData, initialRoomManagerData, userPrefs);
     }
 
     private void initLogging(Config config) {
@@ -181,6 +200,11 @@ public class MainApp extends Application {
             storage.saveUserPrefs(model.getUserPrefs());
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
+        }
+        try {
+            storage.saveRoomManager(model.getRoomManagerState());
+        } catch (IOException e) {
+            logger.severe("Failed to save RoomManager data " + StringUtil.getDetails(e));
         }
     }
 }

@@ -73,10 +73,15 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
+        if (!model.hasSetUp()) {
+            throw new CommandException(Messages.MESSAGE_SETUP_NOT_FOUND);
+        }
+
         if (model.hasBooking(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_BOOKING);
         }
 
+        model.getRoomManagerState();
         model.addBooking(toAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }

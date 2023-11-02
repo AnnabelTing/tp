@@ -18,10 +18,7 @@ import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.BookingsBook;
-import seedu.address.model.Model;
-import seedu.address.model.ReadOnlyBookingsBook;
-import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.*;
 import seedu.address.model.booking.Booking;
 import seedu.address.model.booking.exceptions.BookingNotFoundException;
 import seedu.address.testutil.BookingBuilder;
@@ -110,6 +107,21 @@ public class AddCommandTest {
         }
 
         @Override
+        public RoomManagerState getRoomManagerState() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearSetUp() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Path getRoomManagerFilePath() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public Path getBookingBookFilePath() {
             throw new AssertionError("This method should not be called.");
         }
@@ -129,6 +141,14 @@ public class AddCommandTest {
             throw new AssertionError("This method should not be called.");
         }
 
+        @Override
+        public boolean hasSetUp() {
+            throw new AssertionError("This method should not be called.");
+        }
+        @Override
+        public void setUp(int[] roomNumbers) {
+            throw new AssertionError("This method should not be called.");
+        }
         @Override
         public ReadOnlyBookingsBook getBookingsBook() {
             throw new AssertionError("This method should not be called.");

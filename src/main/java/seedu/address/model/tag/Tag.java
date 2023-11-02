@@ -3,7 +3,7 @@ package seedu.address.model.tag;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-import seedu.address.model.booking.Room;
+import seedu.address.model.booking.RoomType;
 
 /**
  * Represents a Tag in the address book.
@@ -38,7 +38,7 @@ public class Tag {
             return true;
         }
 
-        for (Room.RoomType roomType : Room.RoomType.values()) {
+        for (RoomType roomType : RoomType.values()) {
             if (test.equalsIgnoreCase(roomType.name())) {
                 return true;
             }
